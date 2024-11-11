@@ -1,12 +1,12 @@
-package ru.netology.Test;
+package ru.netology.test;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
-import ru.netology.Data.DataHelper;
-import ru.netology.Data.SQLHelper;
-import ru.netology.Page.LoginPage;
+import ru.netology.data.DataHelper;
+import ru.netology.data.SQLHelper;
+import ru.netology.page.LoginPage;
 
-import static ru.netology.Data.SQLHelper.cleanDatabase;
+import static ru.netology.data.SQLHelper.cleanDatabase;
 import static com.codeborne.selenide.Selenide.open;
 
 public class LoginTest {
@@ -21,7 +21,7 @@ public class LoginTest {
         var loginPage = open("http://localhost:9999", LoginPage.class);
         var authInfo = DataHelper.getAuthInfoWithTestData();
         var verificationPage = loginPage.validLogin(authInfo);
-        verificationPage.verifyVerificationPageVisiblity();
+        verificationPage.verifyVerificationPageVisibility();
         var verificationCode = SQLHelper.getVerificationCode();
         verificationPage.validVerify(verificationCode.getCode());
     }
@@ -31,7 +31,7 @@ public class LoginTest {
         var loginPage = open("http://localhost:9999", LoginPage.class);
         var authInfo = DataHelper.generateRandomUser();
         loginPage.validLogin(authInfo);
-        loginPage.verifyErrorNotificationVisiblity();
+        loginPage.verifyErrorNotificationVisibility("Ошибка! Неверно указан логин или пароль");
     }
 
     @Test
@@ -39,10 +39,10 @@ public class LoginTest {
         var loginPage = open("http://localhost:9999", LoginPage.class);
         var authInfo = DataHelper.getAuthInfoWithTestData();
         var verificationPage = loginPage.validLogin(authInfo);
-        verificationPage.verifyVerificationPageVisiblity();
+        verificationPage.verifyVerificationPageVisibility();
         var verificationCode = DataHelper.generateRandomVerificationCode();
         verificationPage.verify(verificationCode.getCode());
-        verificationPage.verifyErrorNotificationVisiblity();
-
+        verificationPage.verifyErrorNotificationVisibility("Ошибка\n" +
+                "Ошибка! Неверно указан код! Попробуйте ещё раз.");
     }
 }
